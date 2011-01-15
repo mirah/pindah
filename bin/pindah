@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+
+abort "TODO: create project skeleton: rakefile, manifest, resources, activity"

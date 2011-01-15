@@ -1,0 +1,6 @@
+History.txt
+Manifest.txt
+README.md
+Rakefile
+bin/pindah
+lib/pindah.rb
