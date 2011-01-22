@@ -29,7 +29,7 @@ module Pindah
   task :javac do
     # http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/
     # TODO: set dirs from @spec
-    # ant["compile"].execute
+    ant["compile"].execute
   end
 
   desc "Compile Mirah source to JVM bytecode"
