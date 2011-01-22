@@ -30,6 +30,13 @@ with the tools/ directory on your $PATH. You'll also need
     rake resources  # Prepare resources
     rake spec       # Print the project spec
 
+## See Also
+
+If Mirah is just too low-level and you need something more dynamic,
+you can try [Ruboto](https://github.com/ruboto/ruboto-core/), though
+be warned there is a very significant overhead it brings with it from
+JRuby's runtime.
+
 ## License
 
 (The MIT-X11 License)

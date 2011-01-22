@@ -3,11 +3,13 @@ require "fileutils"
 require "pp"
 
 begin
-  require "mirah"
   require 'ant'
+  ant_import
 rescue LoadError
   abort 'This Rakefile requires JRuby. Please use jruby -S rake.'
 end
+
+require "mirah"
 
 module Pindah
   VERSION = '0.1.0.alpha'
@@ -23,23 +25,15 @@ module Pindah
     :sdk => Pindah.infer_sdk_location(ENV["PATH"])
   }
 
-  task :dirs do
-    ["gen", @spec[:output], @spec[:classes]].each do |d|
-      FileUtils.mkdir_p(d)
-    end
-  end
-
-  desc "Prepare resources"
-  task :resources => :dirs do
-    # TODO: load tasks from android_rules in tools/ant/ant_rules_r1.xml
-    # ant["-resource-src"].execute
-    # TODO: jruby can't find the java compiler; wtf
-    # ant.javac(:srcdir => "gen",
-    #           :destdir => @spec[:classes])
+  desc "Compile Java source, including resources."
+  task :javac do
+    # http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/
+    # TODO: set dirs from @spec
+    # ant["compile"].execute
   end
 
   desc "Compile Mirah source to JVM bytecode"
-  task :compile => [:dirs, :resources] do
+  task :compile => :javac do
     begin
       FileUtils.cd @spec[:src]
       Mirah.compile("-c", @spec[:classpath].join(":"),
@@ -54,18 +48,20 @@ module Pindah
 
   task :manifest # TODO: generate from yaml?
 
-  desc "Translate JVM bytecode to Dalvik bytecode"
-  task :dex => :compile
+  # desc "Translate JVM bytecode to Dalvik bytecode"
+  # task :dex => :compile do
+  #   ant["-dex"].execute
+  # end
 
-  task :package_resources => :resources
+  # task :package_resources => :resources
 
-  desc "Create an .apk file for the application"
-  task :package => [:manifest, :dex, :package_resources]
+  # desc "Create an .apk file for the application"
+  # task :package => [:manifest, :dex, :package_resources]
 
-  desc "Install the application on a device or emulator"
-  task :install => :package
+  # desc "Install the application on a device or emulator"
+  # task :install => :package
 
-  task :release => :package
+  # task :release => :package
 
   desc "Tail logs from a device or a device or emulator"
   task :logcat do
@@ -89,7 +85,12 @@ module Pindah
     @spec[:classpath] << "#{@spec[:root]}/#{@spec[:classes]}"
     @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D AndroidRuntime:E *:S"
 
-    require "#{@spec[:sdk]}/tools/lib/anttasks.jar"
+    ["anttasks", "androidprefs", "sdklib"].each do |j|
+      $CLASSPATH << "#{@spec[:sdk]}/tools/lib/#{j}.jar"
+    end
+
+    # TODO: this imports things twice, what?
+    ant_import "#{@spec[:sdk]}/tools/ant/ant_rules_r1.xml"
   end
 
   def self.infer_sdk_location
