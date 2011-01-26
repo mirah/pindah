@@ -1,6 +1,7 @@
 History.txt
 Manifest.txt
 README.md
+README.txt
 Rakefile
 bin/pindah
 lib/pindah.rb
