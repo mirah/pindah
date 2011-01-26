@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
-abort "TODO: create project skeleton: rakefile, manifest, resources, activity"
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'pindah_cli'))
+PindahCLI.create *ARGV
+abort "TODO: create project skeleton: rakefile, manifest, resources"

@@ -5,3 +5,7 @@ README.txt
 Rakefile
 bin/pindah
 lib/pindah.rb
+lib/pindah_cli.rb
+templates/initial_activity.mirah
+test/fixtures/HelloWorld.mirah
+test/pindah_cli_test.rb
