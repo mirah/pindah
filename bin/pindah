@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'pindah_cli'))
-PindahCLI.create *ARGV
+begin
+  PindahCLI.create *ARGV
+rescue ArgumentError
+  puts "Usage: #{File.basename(__FILE__)} org.mirah.HelloWorld ~/hello_world [HelloActivity]"
+end
+
 abort "TODO: create project skeleton: rakefile, manifest, resources"

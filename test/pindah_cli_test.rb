@@ -21,6 +21,18 @@ class PindahCLITest < Test::Unit::TestCase
     assert File.directory?(File.join(@project_path, 'src', 'tld', 'pindah', 'testapp'))
   end
 
+  def test_create_should_create_pindah_spec_file
+    PindahCLI.create('tld.pindah.testapp', '.')
+    assert File.exists?(File.join(@project_path, 'Pindah.spec'))
+
+    expected = File.read(File.join($local_pwd,
+                                  'fixtures',
+                                  'Pindah.spec'))
+    actual   = File.read(File.join(@project_path,
+                                  'Pindah.spec'))
+    assert_equal expected, actual
+  end
+
   def test_create_should_create_an_activity_if_desired
     PindahCLI.create('tld.pindah.testapp', '.', 'HelloWorld')
 
