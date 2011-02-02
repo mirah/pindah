@@ -29,9 +29,11 @@ module Pindah
   task :javac do
     # http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/
     # TODO: set dirs from @spec
+    # TODO: set sdk.dir property
     ant["compile"].execute
   end
 
+  # TODO: define this as -post-compile
   desc "Compile Mirah source to JVM bytecode"
   task :compile => :javac do
     begin
@@ -90,10 +92,6 @@ module Pindah
     end
 
     # TODO: this imports things twice, what?
-    ant_import "#{@spec[:sdk]}/tools/ant/ant_rules_r1.xml"
-  end
-
-  def self.infer_sdk_location
-    # TODO: implement
+    ant_import "#{@spec[:sdk]}/tools/ant/ant_rules_r3.xml"
   end
 end
