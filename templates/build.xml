@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Ferrante" default="help">
+<project name="Pindah-project" default="help">
     <!-- Custom Android task to deal with the project target, and import the
          proper rules.
          This requires ant 1.6.0 or above. -->

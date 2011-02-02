@@ -96,6 +96,7 @@ module Pindah
 
     @ant = Ant.new
 
+    # TODO: use ERB to get project name and R.java location
     build = "/tmp/pindah-#{Process.pid}-build.xml"
     FileUtils.cp(File.join(File.dirname(__FILE__), 
                            '..', 'templates', 
