@@ -4,7 +4,6 @@ require "pp"
 
 begin
   require 'ant'
-  ant_import
 rescue LoadError
   abort 'This Rakefile requires JRuby. Please use jruby -S rake.'
 end
@@ -29,11 +28,11 @@ module Pindah
   task :javac do
     # http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/
     # TODO: set dirs from @spec
-    # TODO: set sdk.dir property
-    ant["compile"].execute
+    # TODO: javac in build.xml doesn't pick up gen/**/R.java
+    @ant.execute_target("compile")
   end
 
-  # TODO: define this as -post-compile
+  # TODO: mirahc from build.xml spawns a separate JVM
   desc "Compile Mirah source to JVM bytecode"
   task :compile => :javac do
     begin
@@ -75,6 +74,10 @@ module Pindah
     pp @spec
   end
 
+  task :default do
+    @ant.execute_target("debug")
+  end
+
   def self.spec=(spec)
     abort "Must provide :target version in Pindah.spec!" if !spec[:target]
     abort "Must provide :name in Pindah.spec!" if !spec[:name]
@@ -91,7 +94,21 @@ module Pindah
       $CLASSPATH << "#{@spec[:sdk]}/tools/lib/#{j}.jar"
     end
 
-    # TODO: this imports things twice, what?
-    ant_import "#{@spec[:sdk]}/tools/ant/ant_rules_r3.xml"
+    @ant = Ant.new
+
+    build = "/tmp/pindah-#{Process.pid}-build.xml"
+    FileUtils.cp(File.join(File.dirname(__FILE__), 
+                           '..', 'templates', 
+                           'build.xml'), build)
+    at_exit { File.delete build }
+
+    { "target" => @spec[:target],
+      "target-version" => @spec[:target],
+      "sdk.dir" => @spec[:sdk] }.each do |key, value|
+      @ant.project.set_user_property(key, value)
+    end
+
+    # ant_import build
+    Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(build))
   end
 end
