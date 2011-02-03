@@ -5,7 +5,8 @@ require 'hoe'
 
 Hoe.spec 'pindah' do
   developer('Phil Hagelberg', 'technomancy@gmail.com')
-  extra_deps << "mirah"
+  readme_file = "README.md"
+  extra_deps << ["mirah", ">= 0.0.5"]
 end
 
 # vim: syntax=ruby
