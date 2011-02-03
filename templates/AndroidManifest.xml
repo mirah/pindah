@@ -6,7 +6,7 @@
     <application android:label="@string/app_name" 
                  android:icon="@drawable/icon"
                  android:debuggable="true">
-        <activity android:name="<%= name %>"
+        <activity android:name="<%= activity_name %>"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
