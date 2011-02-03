@@ -1,0 +1,7 @@
+require "rubygems"
+require "pindah"
+
+Pindah.spec = {
+  :name => "<%= name %>",
+  :target => "<%= DEFAULT_TARGET %>"
+}

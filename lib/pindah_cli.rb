@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'erb'
 
 module PindahCLI
   DEFAULT_TARGET = 'android-7'
@@ -11,21 +12,20 @@ module PindahCLI
   def self.create(namespace, location, activity_name=nil)
     segments = namespace.split('.')
     src_dir  = File.join(location, 'src', *segments)
+    name = location.split("/").last
+
     FileUtils.mkdir_p src_dir
     log "Created '#{src_dir}'."
 
-    spec_location = File.join(location, 'Pindah.spec')
-    spec_template = File.read(File.join(File.dirname(__FILE__), 
-                                        '..', 'templates', 
-                                        'Pindah.spec'))
+    rakefile_location = File.join(location, 'Rakefile')
+    rakefile_template = File.read(File.join(File.dirname(__FILE__), 
+                                            '..', 'templates', 'Rakefile'))
 
-    File.open(spec_location, 'w') do |f|
-      f.puts spec_template.gsub(/PROJECT_NAME/, segments[-1]).
-        gsub(/API_TARGET/, DEFAULT_TARGET).
-        gsub(/API_VERSION/, DEFAULT_VERSION)
+    File.open(rakefile_location, 'w') do |f|
+      f.puts ERB.new(rakefile_template).result(binding)
     end
-    log "Created Pindah spec file in '#{spec_location}'."
 
+    log "Created project in #{location}."
 
     if activity_name
       activity_location = File.join(src_dir, "#{activity_name}.mirah")

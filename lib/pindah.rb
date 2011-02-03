@@ -68,8 +68,9 @@ module Pindah
     File.open(build, "w") { |f| f.puts build_template.result(binding) }
     at_exit { File.delete build }
 
+    # TODO: infer target-version from target
     { "target" => @spec[:target],
-      "target-version" => @spec[:target],
+      "target-version" => @spec[:target_version],
       "sdk.dir" => @spec[:sdk],
       "classes" => @spec[:classes],
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
