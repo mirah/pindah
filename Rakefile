@@ -3,9 +3,11 @@
 require 'rubygems'
 require 'hoe'
 
-Hoe.spec 'pindah' do
+Hoe.spec 'pindah' do |h|
   developer('Phil Hagelberg', 'technomancy@gmail.com')
-  readme_file = "README.md"
+  h.url = "http://github.com/mirah/pindah"
+  h.readme_file = "README.md"
+  h.summary = "A tool for writing Android applications in Mirah"
   extra_deps << ["mirah", ">= 0.0.5"]
 end
 
