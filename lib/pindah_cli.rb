@@ -44,6 +44,8 @@ module PindahCLI
 
     create_templated("Rakefile", location, binding)
     create_templated("AndroidManifest.xml", location, binding)
+    create_templated("main.xml", File.join(location, 'res', 'layout'), binding)
+    create_templated("strings.xml", File.join(location, 'res', 'values'), binding)
 
     log "Created project in #{location}."
 

@@ -57,4 +57,16 @@ class PindahCLITest < Test::Unit::TestCase
     assert File.exists?(manifest_path)
     assert_equal fixture("AndroidManifest.xml"), File.read(manifest_path)
   end
+
+  def test_create_should_create_strings
+    path = File.join(@project_path, 'res', 'values', 'strings.xml')
+    assert File.exists?(path)
+    assert_equal fixture("strings.xml").strip, File.read(path).strip
+  end
+  
+  def test_create_should_create_layout
+    path = File.join(@project_path, 'res', 'layout', 'main.xml')
+    assert File.exists?(path)
+    assert_equal fixture("main.xml").strip, File.read(path).strip
+  end
 end
