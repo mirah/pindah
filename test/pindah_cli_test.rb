@@ -55,7 +55,20 @@ class PindahCLITest < Test::Unit::TestCase
     manifest_path = File.join(@project_path, 'AndroidManifest.xml')
 
     assert File.exists?(manifest_path)
-    assert_equal fixture("AndroidManifest.xml"), File.read(manifest_path)
+    assert_equal fixture("AndroidManifest.xml").gsub(/\s+/, ' '), File.read(manifest_path).gsub(/\s+/, ' ')
+  end
+
+  def test_create_should_create_manifest_without_activity
+    @temp = Dir.mktmpdir("pindah-")
+    @project_path = "#{@temp}/testapp"
+    FileUtils.mkdir_p File.dirname(@temp)
+    Dir.chdir File.dirname(@temp)
+    PindahCLI.create('tld.pindah.testapp', @project_path)
+
+    manifest_path = File.join(@project_path, 'AndroidManifest.xml')
+
+    assert File.exists?(manifest_path)
+    assert_equal fixture("AndroidManifest.xml.no-activity").gsub(/\s+/, ' '), File.read(manifest_path).gsub(/\s+/, ' ')
   end
 
   def test_create_should_create_strings
