@@ -8,21 +8,26 @@ module PindahCLI
   def self.log(msg)
     STDERR.puts msg
   end
+
+  def self.create_templated(name, project_location, scope)
+    location = File.join(project_location, name)
+    template = File.read(File.join(File.dirname(__FILE__), 
+                                   '..', 'templates', name))
+
+    File.open(location, 'w') do |f|
+      f.puts ERB.new(template).result(scope)
+    end
+  end
   
-  def self.create(namespace, location, activity_name=nil)
-    segments = namespace.split('.')
+  def self.create(package, location, activity_name=nil)
+    segments = package.split('.')
     src_dir  = File.join(location, 'src', *segments)
     name = location.split("/").last
 
     FileUtils.mkdir_p src_dir
 
-    rakefile_location = File.join(location, 'Rakefile')
-    rakefile_template = File.read(File.join(File.dirname(__FILE__), 
-                                            '..', 'templates', 'Rakefile'))
-
-    File.open(rakefile_location, 'w') do |f|
-      f.puts ERB.new(rakefile_template).result(binding)
-    end
+    create_templated("Rakefile", location, binding)
+    create_templated("AndroidManifest.xml", location, binding)
 
     log "Created project in #{location}."
 

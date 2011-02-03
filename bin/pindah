@@ -8,4 +8,4 @@ rescue ArgumentError
   puts "Usage: #{File.basename(__FILE__)} org.mirah.HelloWorld ~/hello_world [HelloActivity]"
 end
 
-abort "TODO: create manifest, resources"
+abort "TODO: create resources dir"
