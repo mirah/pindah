@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Pindah-project" default="help">
-    <!-- Custom Android task to deal with the project target, and import the
-         proper rules.
-         This requires ant 1.6.0 or above. -->
+<project name="<%= @spec[:name] %>">
     <path id="android.antlibs">
         <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
         <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
@@ -13,61 +10,18 @@
         classname="com.android.ant.SetupTask"
         classpathref="android.antlibs" />
 
-<!-- extension targets. Uncomment the ones where you want to do custom work
-     in between standard targets -->
-<!--
-    <target name="-pre-build">
-    </target>
-    <target name="-pre-compile">
-    </target>
-
-    [This is typically used for code obfuscation.
-     Compiled code location: ${out.classes.absolute.dir}
-     If this is not done in place, override ${out.dex.input.absolute.dir}]
-    <target name="-post-compile">
-    </target>
--->
-
-
-    <!-- Execute the Android Setup task that will setup some properties
-         specific to the target, and import the build rules files. -->
-
-    <target name="javac" description="Compiles R.java">
-      <exec executable="javac">
-        <arg value="-sourcepath" />
-        <!-- TODO: fix -->
-        <arg value="gen/**/R.java" />
-        <arg value="-d" />
-        <arg value="bin/classes" />
-      </exec>
+    <target name="javac" description="Compiles R.java and other gen/ files.">
+      <javac srcdir="gen" destdir="${classes}" includeantruntime="false" />
     </target>
 
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
       <exec executable="mirahc" dir="src">
-        <arg line="-c ${sdk.dir}/platforms/${target-version}/android.jar:../bin/classes/" />
-        <arg value="-d" />
-        <arg value="../bin/classes/" />
+        <arg line="-c ${classpath}" />
+        <arg line="-d ${classes}" />
         <arg value="." />
       </exec>
     </target>
 
-    <!--
-         The rules file is imported from
-            <SDK>/platforms/<target_platform>/ant/ant_rules_r#.xml
-
-         To customize existing targets, there are two options:
-         - Customize only one target:
-             - copy/paste the target into this file, *before* the
-               <setup> task.
-             - customize it to your needs.
-         - Customize the whole script.
-             - copy/paste the content of the rules files (minus the top node)
-               into this file, *after* the <setup> task
-             - disable the import of the rules by changing the setup task
-               below to <setup import="false" />. 
-             - customize to your needs.
-    -->
     <setup />
-
 </project>

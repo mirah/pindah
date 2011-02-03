@@ -7,5 +7,6 @@ bin/pindah
 lib/pindah.rb
 lib/pindah_cli.rb
 templates/initial_activity.mirah
+templates/build.xml
 test/fixtures/HelloWorld.mirah
 test/pindah_cli_test.rb

@@ -1,6 +1,7 @@
 require "rake"
 require "fileutils"
 require "pp"
+require "erb"
 
 begin
   require 'ant'
@@ -18,51 +19,16 @@ module Pindah
     File.expand_path("#{tools}/..")
   end
 
-  DEFAULTS = { :output => "bin",
-    :src => "src",
-    :classpath => [],
+  DEFAULTS = { :output => File.expand_path("bin"),
+    :src => File.expand_path("src"),
+    :classpath => Dir["jars/*jar"],
     :sdk => Pindah.infer_sdk_location(ENV["PATH"])
   }
 
-  desc "Compile Java source, including resources."
-  task :javac do
-    # http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/
-    # TODO: set dirs from @spec
-    # TODO: javac in build.xml doesn't pick up gen/**/R.java
-    @ant.execute_target("compile")
-  end
+  ANT_TASKS = ["clean", "javac", "compile", "debug", "release",
+               "install", "uninstall"]
 
-  # TODO: mirahc from build.xml spawns a separate JVM
-  desc "Compile Mirah source to JVM bytecode"
-  task :compile => :javac do
-    begin
-      FileUtils.cd @spec[:src]
-      Mirah.compile("-c", @spec[:classpath].join(":"),
-                    "-d", "#{@spec[:root]}/#{@spec[:classes]}", ".")
-    ensure
-      FileUtils.cd @spec[:root]
-    end
-  end
-
-  desc "Removes output files created by other targets"
-  task :clean
-
-  task :manifest # TODO: generate from yaml?
-
-  # desc "Translate JVM bytecode to Dalvik bytecode"
-  # task :dex => :compile do
-  #   ant["-dex"].execute
-  # end
-
-  # task :package_resources => :resources
-
-  # desc "Create an .apk file for the application"
-  # task :package => [:manifest, :dex, :package_resources]
-
-  # desc "Install the application on a device or emulator"
-  # task :install => :package
-
-  # task :release => :package
+  task :generate_manifest # TODO: generate from yaml?
 
   desc "Tail logs from a device or a device or emulator"
   task :logcat do
@@ -74,9 +40,7 @@ module Pindah
     pp @spec
   end
 
-  task :default do
-    @ant.execute_target("debug")
-  end
+  task :default => [:install]
 
   def self.spec=(spec)
     abort "Must provide :target version in Pindah.spec!" if !spec[:target]
@@ -86,30 +50,41 @@ module Pindah
 
     @spec[:root] = File.expand_path "."
     @spec[:classes] ||= "#{@spec[:output]}/classes"
+    @spec[:classpath] << @spec[:classes]
     @spec[:classpath] << "#{@spec[:sdk]}/platforms/#{@spec[:target]}/android.jar"
-    @spec[:classpath] << "#{@spec[:root]}/#{@spec[:classes]}"
-    @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D AndroidRuntime:E *:S"
+    @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D " +
+      "AndroidRuntime:E *:S"
 
-    ["anttasks", "androidprefs", "sdklib"].each do |j|
-      $CLASSPATH << "#{@spec[:sdk]}/tools/lib/#{j}.jar"
-    end
+    ant_setup
+  end
 
+  def self.ant_setup
     @ant = Ant.new
 
-    # TODO: use ERB to get project name and R.java location
+    # TODO: this is lame, but ant interpolation doesn't work for project name
+    build_template = ERB.new(File.read(File.join(File.dirname(__FILE__), '..',
+                                                 'templates', 'build.xml')))
     build = "/tmp/pindah-#{Process.pid}-build.xml"
-    FileUtils.cp(File.join(File.dirname(__FILE__), 
-                           '..', 'templates', 
-                           'build.xml'), build)
+    File.open(build, "w") { |f| f.puts build_template.result(binding) }
     at_exit { File.delete build }
 
     { "target" => @spec[:target],
       "target-version" => @spec[:target],
-      "sdk.dir" => @spec[:sdk] }.each do |key, value|
+      "sdk.dir" => @spec[:sdk],
+      "classes" => @spec[:classes],
+      "classpath" => @spec[:classpath].join(Java::JavaLang::System::
+                                            getProperty("path.separator"))
+    }.each do |key, value|
       @ant.project.set_user_property(key, value)
     end
 
-    # ant_import build
+    # TODO: compile task execs mirahc instead of running inside current JVM
     Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(build))
+
+    # Turn ant tasks into rake tasks
+    ANT_TASKS.each do |name, description|
+      desc @ant.project.targets[name].description
+      task(name) { @ant.project.execute_target(name) }
+    end
   end
 end
