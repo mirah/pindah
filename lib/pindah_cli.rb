@@ -18,10 +18,26 @@ module PindahCLI
       f.puts ERB.new(template).result(scope)
     end
   end
-  
+
+  def self.mkdir(base, directory)
+    location = File.join(base, directory)
+    FileUtils.mkdir_p location
+    log "Created '#{location}'."
+  end
+
   def self.create(package, location, activity_name=nil)
     segments = package.split('.')
     src_dir  = File.join(location, 'src', *segments)
+    mkdir location, File.join('src', *segments)
+    mkdir location, 'bin'
+    mkdir location, 'libs'
+    mkdir location, 'res'
+    mkdir location, 'res/drawable-hdpi'
+    mkdir location, 'res/drawable-ldpi'
+    mkdir location, 'res/drawable-mdpi'
+    mkdir location, 'res/layout'
+    mkdir location, 'res/values'
+
     name = location.split("/").last
 
     FileUtils.mkdir_p src_dir

@@ -24,7 +24,17 @@ class PindahCLITest < Test::Unit::TestCase
   end
 
   def test_create_should_create_basic_project_structure
+    PindahCLI.create('tld.pindah.testapp', '.')
     assert File.directory?(File.join(@project_path, 'src', 'tld', 'pindah', 'testapp'))
+
+    directories = %w{ src/tld/pindah/testapp bin libs res
+                      res/drawable-hdpi res/drawable-ldpi
+                      res/drawable-mdpi res/layout res/values }
+
+    directories.each do |d|
+      expected = File.join(@project_path, d)
+      assert File.directory?(expected), "Expected #{expected.inspect} to be a directory."
+    end
   end
 
   def test_create_should_create_rakefile
