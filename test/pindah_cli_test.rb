@@ -1,50 +1,46 @@
 require 'test/unit'
-require 'tempfile'
+require 'tmpdir'
 require 'fileutils'
 require 'rubygems'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'pindah_cli'))
 
 class PindahCLITest < Test::Unit::TestCase
+  PWD = File.expand_path(File.dirname(__FILE__))
+
+  def fixture(name)
+    File.read(File.join(PWD, 'fixtures', name))
+  end
+
   def setup
-    $local_pwd ||= File.expand_path(File.dirname(__FILE__))
-    @project_path = File.expand_path(Tempfile.new('pindah').path + ".d")
-    FileUtils.mkdir_p @project_path
-    Dir.chdir @project_path
+    @temp = Dir.mktmpdir("pindah-")
+    @project_path = "#{@temp}/testapp"
+    FileUtils.mkdir_p File.dirname(@temp)
+    Dir.chdir File.dirname(@temp)
   end
 
   def teardown
-    FileUtils.rm_rf @project_path
+    FileUtils.rm_rf @temp
   end
 
   def test_create_should_create_basic_project_structure
-    PindahCLI.create('tld.pindah.testapp', '.')
+    PindahCLI.create('tld.pindah.testapp', @project_path)
     assert File.directory?(File.join(@project_path, 'src', 'tld', 'pindah', 'testapp'))
   end
 
-  def test_create_should_create_pindah_spec_file
-    PindahCLI.create('tld.pindah.testapp', '.')
-    assert File.exists?(File.join(@project_path, 'Pindah.spec'))
+  def test_create_should_create_rakefile
+    PindahCLI.create('tld.pindah.testapp', @project_path)
+    rake_path = File.join(@project_path, 'Rakefile')
 
-    expected = File.read(File.join($local_pwd,
-                                  'fixtures',
-                                  'Pindah.spec'))
-    actual   = File.read(File.join(@project_path,
-                                  'Pindah.spec'))
-    assert_equal expected, actual
+    assert File.exists?(rake_path)
+    assert_equal fixture("Rakefile"), File.read(rake_path)
   end
 
   def test_create_should_create_an_activity_if_desired
-    PindahCLI.create('tld.pindah.testapp', '.', 'HelloWorld')
+    PindahCLI.create('tld.pindah.testapp', @project_path, 'HelloWorld')
 
-    expected = File.read(File.join($local_pwd,
-                                   'fixtures',
-                                   'HelloWorld.mirah'))
-    actual   = File.read(File.join(@project_path,
-                                   'src',
-                                   'tld',
-                                   'pindah',
-                                   'testapp',
-                                   'HelloWorld.mirah'))
-    assert_equal expected, actual
+    actual = File.read(File.join(@project_path, 'src',
+                                 'tld', 'pindah',
+                                 'testapp', 'HelloWorld.mirah'))
+    assert_equal fixture('HelloWorld.mirah'), actual
   end
 end

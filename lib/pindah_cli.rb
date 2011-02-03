@@ -15,7 +15,6 @@ module PindahCLI
     name = location.split("/").last
 
     FileUtils.mkdir_p src_dir
-    log "Created '#{src_dir}'."
 
     rakefile_location = File.join(location, 'Rakefile')
     rakefile_template = File.read(File.join(File.dirname(__FILE__), 
