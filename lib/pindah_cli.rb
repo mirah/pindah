@@ -2,8 +2,7 @@ require 'fileutils'
 require 'erb'
 
 module PindahCLI
-  DEFAULT_TARGET = 'android-7'
-  DEFAULT_VERSION = 'android-2.1'
+  DEFAULT_TARGET_VERSION = '2.1'
 
   def self.log(msg)
     STDERR.puts msg

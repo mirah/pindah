@@ -3,5 +3,5 @@ require "pindah"
 
 Pindah.spec = {
   :name => "<%= name %>",
-  :target => "<%= DEFAULT_TARGET %>"
+  :target_version => "<%= DEFAULT_TARGET_VERSION %>"
 }

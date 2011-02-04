@@ -25,6 +25,9 @@ module Pindah
     :sdk => Pindah.infer_sdk_location(ENV["PATH"])
   }
 
+  TARGETS = { "1.5" => 3, "1.6" => 4,
+    "2.1" => 7, "2.2" => 8, "2.3" => 9 }
+
   ANT_TASKS = ["clean", "javac", "compile", "debug", "release",
                "install", "uninstall"]
 
@@ -43,15 +46,16 @@ module Pindah
   task :default => [:install]
 
   def self.spec=(spec)
-    abort "Must provide :target version in Pindah.spec!" if !spec[:target]
+    abort "Must provide :target_version in Pindah.spec!" if !spec[:target_version]
     abort "Must provide :name in Pindah.spec!" if !spec[:name]
 
     @spec = DEFAULTS.merge(spec)
 
     @spec[:root] = File.expand_path "."
+    @spec[:target] ||= TARGETS[@spec[:target_version].to_s.sub(/android-/, '')]
     @spec[:classes] ||= "#{@spec[:output]}/classes"
     @spec[:classpath] << @spec[:classes]
-    @spec[:classpath] << "#{@spec[:sdk]}/platforms/#{@spec[:target]}/android.jar"
+    @spec[:classpath] << "#{@spec[:sdk]}/platforms/android-#{@spec[:target]}/android.jar"
     @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D " +
       "AndroidRuntime:E *:S"
 
@@ -68,9 +72,8 @@ module Pindah
     File.open(build, "w") { |f| f.puts build_template.result(binding) }
     at_exit { File.delete build }
 
-    # TODO: infer target-version from target
-    { "target" => @spec[:target],
-      "target-version" => @spec[:target_version],
+    { "target" => "android-#{@spec[:target]}",
+      "target-version" => "android-#{@spec[:target_version]}",
       "sdk.dir" => @spec[:sdk],
       "classes" => @spec[:classes],
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
