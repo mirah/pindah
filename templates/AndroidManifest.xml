@@ -3,8 +3,9 @@
       package="<%= package %>"
       android:versionCode="1"
       android:versionName="1.0">
+      <!-- TODO: add back android:icon="@drawable/icon" 
+           once we have icons -->
     <application android:label="@string/app_name" 
-                 android:icon="@drawable/icon"
                  android:debuggable="true">
       <% if activity_name %>
         <activity android:name="<%= activity_name %>"

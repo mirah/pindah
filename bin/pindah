@@ -5,7 +5,5 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'pindah_
 begin
   PindahCLI.create *ARGV
 rescue ArgumentError
-  puts "Usage: #{File.basename(__FILE__)} org.mirah.HelloWorld ~/hello_world [HelloActivity]"
+  abort "Usage: #{File.basename($0)} org.example.hello ~/hello_world [HelloActivity]"
 end
-
-abort "TODO: create resources dir"
