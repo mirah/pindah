@@ -47,7 +47,7 @@ module PindahCLI
     create_templated("AndroidManifest.xml", location, binding)
     create_templated("main.xml", File.join(location, 'res', 'layout'), binding)
     create_templated("strings.xml", File.join(location, 'res', 'values'), binding)
-    create_templated("gitignore", File.join(location, '.gitignore'), binding)
+    create_templated(".gitignore", location, binding)
 
     # Default icons of various sizes
     ["hdpi", "mdpi", "ldpi"].each do |s|
