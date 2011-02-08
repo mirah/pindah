@@ -46,6 +46,13 @@ module PindahCLI
     create_templated("main.xml", File.join(location, 'res', 'layout'), binding)
     create_templated("strings.xml", File.join(location, 'res', 'values'), binding)
 
+    # Default icons of various sizes
+    ["hdpi", "mdpi", "ldpi"].each do |s|
+      FileUtils.cp(File.join(File.dirname(__FILE__), '..', 'templates', "res",
+                             "drawable-#{s}", "ic_launcher.png"),
+                   File.join(location, "res", "drawable-#{s}", "ic_launcher.png"))
+    end
+    
     log "Created project in #{location}."
 
     if activity_name
