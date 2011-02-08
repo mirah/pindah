@@ -24,15 +24,16 @@ and rake commands with jruby -S:
 
 ## Usage
 
-See [Garrett](http://github.com/technomancy/Garrett) for an example of
-basic usage.
+The <tt>pindah</tt> executable will create a new project starting
+point given a package name. A package is a namespace for your code
+that is often derived from a domain name you own, but can be any
+hierarchical identifier as long as it's unique.
 
-    $ pindah org.example.hello_world # optional path and activity name arguments
+    $ pindah create org.example.hello_world # optional path and activity name arguments
 
     $ cd hello_world && tree
     .
     |-- AndroidManifest.xml
-    |-- bin
     |-- libs
     |-- Rakefile
     |-- res
@@ -53,6 +54,12 @@ basic usage.
                     `-- Start.mirah
 
     12 directories, 8 files
+
+The <tt>res/</tt> directory contains application resources like icons,
+layout descriptions, and strings. The <tt>AndroidManifest.xml</tt>
+describes the contents and metadata of your application. The
+<tt>src</tt> directory contains the source code inside your package
+directory.
 
     $ rake -T
     
@@ -85,6 +92,9 @@ main difference between Pindah and the standard Ant build is that the
 Rakefile replaces build.xml as well as all the properties files. The
 page above also explains how to get an emulator running for testing
 your application.
+
+See [Garrett](http://github.com/technomancy/Garrett) for an example of
+a basic project.
 
 ## See Also
 

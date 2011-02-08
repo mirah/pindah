@@ -8,8 +8,8 @@ module PindahCLI
     segments = package.split('.')
     location ||= segments.last
     src_dir  = File.join(location, 'src', *segments)
+
     mkdir location, File.join('src', *segments)
-    mkdir location, 'bin'
     mkdir location, 'libs'
     mkdir location, 'res'
     mkdir location, 'res/drawable-hdpi'
