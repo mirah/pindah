@@ -27,13 +27,32 @@ and rake commands with jruby -S:
 See [Garrett](http://github.com/technomancy/Garrett) for an example of
 basic usage.
 
-TODO: project template creation is not complete
-
-    $ pindah hello.world hello_world [HelloActivity]
+    $ pindah org.example.hello_world # optional path and activity name arguments
 
     $ cd hello_world && tree
+    .
+    |-- AndroidManifest.xml
+    |-- bin
+    |-- libs
+    |-- Rakefile
+    |-- res
+    |   |-- drawable-hdpi
+    |   |   `-- ic_launcher.png
+    |   |-- drawable-ldpi
+    |   |   `-- ic_launcher.png
+    |   |-- drawable-mdpi
+    |   |   `-- ic_launcher.png
+    |   |-- layout
+    |   |   `-- main.xml
+    |   `-- values
+    |       `-- strings.xml
+    `-- src
+        `-- org
+            `-- example
+                `-- hello_world
+                    `-- Start.mirah
 
-    [TODO: project skeleton listing]
+    12 directories, 8 files
 
     $ rake -T
     
@@ -46,6 +65,20 @@ TODO: project template creation is not complete
     rake release    # Builds the application.
     rake spec       # Print the project spec
     rake uninstall  # Uninstalls the application from a running emulator or dev...
+
+    $ rake debug
+    
+    # [...]
+    
+    $ ls -l bin/hello_world-debug.apk
+
+    -rw-r--r--   1 user           user        13222 Feb  7 23:16 bin/hello_world-debug.apk
+
+This .apk file may be installed on a connected device or emulator with
+<tt>rake install</tt>. It may even distributed for users to install
+themselves, though stable versions should use the <tt>release</tt>
+task. The official documentation has
+[more details on building](http://developer.android.com/guide/developing/other-ide.html#Building).
 
 ## See Also
 
