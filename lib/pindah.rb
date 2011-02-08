@@ -72,6 +72,7 @@ module Pindah
     File.open(build, "w") { |f| f.puts build_template.result(binding) }
     at_exit { File.delete build }
 
+    # TODO: add key signing config
     { "target" => "android-#{@spec[:target]}",
       "target-version" => "android-#{@spec[:target_version]}",
       "sdk.dir" => @spec[:sdk],

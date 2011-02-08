@@ -77,8 +77,14 @@ basic usage.
 This .apk file may be installed on a connected device or emulator with
 <tt>rake install</tt>. It may even distributed for users to install
 themselves, though stable versions should use the <tt>release</tt>
-task. The official documentation has
-[more details on building](http://developer.android.com/guide/developing/other-ide.html#Building).
+task. 
+
+The official documentation has
+[more details on building](http://developer.android.com/guide/developing/other-ide.html#Building). The
+main difference between Pindah and the standard Ant build is that the
+Rakefile replaces build.xml as well as all the properties files. The
+page above also explains how to get an emulator running for testing
+your application.
 
 ## See Also
 
