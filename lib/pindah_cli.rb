@@ -24,8 +24,9 @@ module PindahCLI
     log "Created '#{location}'."
   end
 
-  def self.create(package, location, activity_name=nil)
+  def self.create(package, location=nil, activity_name="Start")
     segments = package.split('.')
+    location ||= segments.last
     src_dir  = File.join(location, 'src', *segments)
     mkdir location, File.join('src', *segments)
     mkdir location, 'bin'
@@ -57,16 +58,14 @@ module PindahCLI
     
     log "Created project in #{location}."
 
-    if activity_name
-      activity_location = File.join(src_dir, "#{activity_name}.mirah")
-      activity_template = File.read(File.join(File.dirname(__FILE__),
-                                              '..', 'templates',
-                                              'initial_activity.mirah'))
+    activity_location = File.join(src_dir, "#{activity_name}.mirah")
+    activity_template = File.read(File.join(File.dirname(__FILE__),
+                                            '..', 'templates',
+                                            'initial_activity.mirah'))
 
-      File.open(activity_location, 'w') do |f|
-        f.puts activity_template.gsub(/INITIAL_ACTIVITY/, activity_name)
-      end
-      log "Created Activity '#{activity_name}' in '#{activity_location}'."
+    File.open(activity_location, 'w') do |f|
+      f.puts activity_template.gsub(/INITIAL_ACTIVITY/, activity_name)
     end
+    log "Created Activity '#{activity_name}' in '#{activity_location}'."
   end
 end
