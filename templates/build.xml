@@ -11,12 +11,13 @@
         classpathref="android.antlibs" />
 
     <target name="javac" description="Compiles R.java and other gen/ files.">
-      <javac srcdir="gen" destdir="${classes}" includeantruntime="false" />
+      <javac srcdir="gen" destdir="${classes}" 
+             includeantruntime="false" failonerror="true" />
     </target>
 
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
-      <exec executable="mirahc" dir="src">
+      <exec executable="mirahc" dir="src" failonerror="true">
         <arg line="-c ${classpath}" />
         <arg line="-d ${classes}" />
         <arg value="." />
