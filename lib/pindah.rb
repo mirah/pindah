@@ -75,6 +75,7 @@ module Pindah
     # TODO: add key signing config
     { "target" => "android-#{@spec[:target]}",
       "target-version" => "android-#{@spec[:target_version]}",
+      "src" => @spec[:src],
       "sdk.dir" => @spec[:sdk],
       "classes" => @spec[:classes],
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
@@ -83,7 +84,6 @@ module Pindah
       @ant.project.set_user_property(key, value)
     end
 
-    # TODO: compile task execs mirahc instead of running inside current JVM
     Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(build))
 
     # Turn ant tasks into rake tasks

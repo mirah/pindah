@@ -10,6 +10,9 @@
         classname="com.android.ant.SetupTask"
         classpathref="android.antlibs" />
 
+    <taskdef name="mirahc" classname="org.mirah.ant.Compile" />
+
+    <!-- TODO: better support for mixed-source builds -->
     <target name="javac" description="Compiles R.java and other gen/ files.">
       <javac srcdir="gen" destdir="${classes}" 
              includeantruntime="false" failonerror="true" />
@@ -17,11 +20,7 @@
 
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
-      <exec executable="mirahc" dir="src" failonerror="true">
-        <arg line="-c ${classpath}" />
-        <arg line="-d ${classes}" />
-        <arg value="." />
-      </exec>
+      <mirahc src="${src}" destdir="${classes}" classpath="${classpath}" />
     </target>
 
     <setup />
