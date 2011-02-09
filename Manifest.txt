@@ -5,7 +5,15 @@ Rakefile
 bin/pindah
 lib/pindah.rb
 lib/pindah_cli.rb
-templates/initial_activity.mirah
+templates/AndroidManifest.xml
 templates/build.xml
+templates/main.xml
+templates/strings.xml
+templates/Rakefile
+templates/initial_activity.mirah
+templates/.gitignore
+templates/res/drawable-mdpi/ic_launcher.png
+templates/res/drawable-hdpi/ic_launcher.png
+templates/res/drawable-ldpi/ic_launcher.png
 test/fixtures/HelloWorld.mirah
 test/pindah_cli_test.rb
