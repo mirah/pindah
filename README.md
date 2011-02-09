@@ -1,4 +1,4 @@
-# pindah
+# Pindah
 
 A tool for writing Android applications in [Mirah](http://mirah.org).
 
