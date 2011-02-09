@@ -96,6 +96,12 @@ your application.
 See [Garrett](http://github.com/technomancy/Garrett) for an example of
 a basic project.
 
+## Community
+
+Problems? Suggestions? Bring them up on the
+[Mirah mailing list](http://groups.google.com/group/mirah/) or the #mirah
+IRC channel on freenode.
+
 ## See Also
 
 If Mirah is just too low-level and you need something more dynamic,
