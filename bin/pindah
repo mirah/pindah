@@ -4,6 +4,6 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'pindah_
 
 begin
   PindahCLI.send *ARGV
-rescue ArgumentError
+rescue ArgumentError, NoMethodError
   abort "Usage: #{File.basename($0)} create org.example.hello [/path/to/hello_world] [HelloActivity]"
 end
