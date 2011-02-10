@@ -12,7 +12,7 @@ end
 require "mirah"
 
 module Pindah
-  VERSION = '0.5.0-dev'
+  VERSION = '0.5.0'
 
   def self.infer_sdk_location(path)
     tools = path.split(":").detect {|p| File.exists? "#{p}/android" }
