@@ -13,7 +13,7 @@ class PindahBuildTest < Test::Unit::TestCase
   def setup
     @garrett = File.expand_path(File.join(File.dirname(__FILE__), "garrett"))
     unless File.exists? @garrett
-      system "git clone git://github.com/technomancy/Garrett.git #{@garrett}"
+      system "git clone git://github.com/zapnap/Garrett.git #{@garrett}"
     end
     system "cd #{@garrett}; git pull"
   end
