@@ -21,7 +21,7 @@
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
            <mirahc src="${src}" dir="${src}" destdir="${classes}" 
-                   classpath="${classpath}" />
+                   classpath="${classpath}" failonerror="true"/>
     </target>
 
     <setup />
