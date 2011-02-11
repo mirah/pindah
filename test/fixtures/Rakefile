@@ -3,5 +3,5 @@ require "pindah"
 
 Pindah.spec = {
   :name => "testapp",
-  :target => "android-7"
+  :target_version => "2.1"
 }

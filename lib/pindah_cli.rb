@@ -4,12 +4,13 @@ require 'erb'
 module PindahCLI
   DEFAULT_TARGET_VERSION = '2.1'
 
-  def self.create(package, location=nil, activity_name="Start")
+  def self.create(package, location=nil, activity_name=nil)
     segments = package.split('.')
     location ||= segments.last
     src_dir  = File.join(location, 'src', *segments)
 
     mkdir location, File.join('src', *segments)
+    mkdir location, 'bin'
     mkdir location, 'libs'
     mkdir location, 'res'
     mkdir location, 'res/drawable-hdpi'
@@ -38,18 +39,21 @@ module PindahCLI
     
     log "Created project in #{location}."
 
-    activity_location = File.join(src_dir, "#{activity_name}.mirah")
-    activity_template = File.read(File.join(File.dirname(__FILE__),
-                                            '..', 'templates',
-                                            'initial_activity.mirah'))
+    if activity_name
+      activity_location = File.join(src_dir, "#{activity_name}.mirah")
+      activity_template = File.read(File.join(File.dirname(__FILE__),
+                                              '..', 'templates',
+                                              'initial_activity.mirah'))
 
-    File.open(activity_location, 'w') do |f|
-      f.puts activity_template.gsub(/INITIAL_ACTIVITY/, activity_name)
+      File.open(activity_location, 'w') do |f|
+        f.puts activity_template.gsub(/INITIAL_ACTIVITY/, activity_name)
+      end
+      log "Created Activity '#{activity_name}' in '#{activity_location}'."
     end
-    log "Created Activity '#{activity_name}' in '#{activity_location}'."
   end
 
   private
+
   def self.log(msg)
     STDERR.puts msg
   end
