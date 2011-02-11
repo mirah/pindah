@@ -35,7 +35,7 @@ module Pindah
 
   desc "Tail logs from a device or a device or emulator"
   task :logcat do
-    system "adb -d logcat #{@spec[:log_filter]}"
+    system "adb logcat #{@spec[:log_spec]}"
   end
 
   desc "Print the project spec"
