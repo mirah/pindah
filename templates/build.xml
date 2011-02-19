@@ -20,14 +20,8 @@
 
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
-      <!-- TODO: mirahc task doesn't infer package correctly.
-           <mirahc src="${src}" destdir="${classes}" 
-           classpath="${classpath}" /> -->
-      <exec executable="mirahc" dir="src" failonerror="true">
-        <arg line="-c ${classpath}" />
-        <arg line="-d ${classes}" />
-        <arg value="." />
-      </exec>
+      <mirahc src="${src}" destdir="${classes}" 
+              classpath="${classpath}" />
     </target>
 
     <setup />

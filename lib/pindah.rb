@@ -53,7 +53,7 @@ module Pindah
 
     @spec[:root] = File.expand_path "."
     @spec[:target] ||= TARGETS[@spec[:target_version].to_s.sub(/android-/, '')]
-    @spec[:classes] ||= "#{@spec[:output]}/classes"
+    @spec[:classes] ||= "#{@spec[:output]}/classes/"
     @spec[:classpath] << @spec[:classes]
     @spec[:classpath] << "#{@spec[:sdk]}/platforms/android-#{@spec[:target]}/android.jar"
     @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D " +
