@@ -16,9 +16,9 @@ and is a reasonable target for new applications. Once the platform
 tools are installed, place the SDK's <tt>platform-tools/</tt>
 directory on your $PATH as well.
 
-You'll also need [JRuby](http://jruby.org) installed with bin/ on your
-$PATH. If your gem and rake are not from from JRuby, prefix the gem
-and rake commands with jruby -S:
+You'll also need [JRuby](http://jruby.org) version 1.6 or higher 
+installed with bin/ on your $PATH. If your gem and rake are not from 
+from JRuby, prefix the gem and rake commands with jruby -S:
 
     $ gem install pindah
 
