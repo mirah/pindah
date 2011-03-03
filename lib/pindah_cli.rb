@@ -46,7 +46,8 @@ module PindahCLI
                                               'initial_activity.mirah'))
 
       File.open(activity_location, 'w') do |f|
-        f.puts activity_template.gsub(/INITIAL_ACTIVITY/, activity_name)
+        template_with_classname = activity_template.gsub(/INITIAL_ACTIVITY/, activity_name)
+        f.puts ERB.new(template_with_classname).result(binding)
       end
       log "Created Activity '#{activity_name}' in '#{activity_location}'."
     end

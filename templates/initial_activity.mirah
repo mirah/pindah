@@ -1,3 +1,5 @@
+package <%= package %>
+
 import android.app.Activity
 
 class INITIAL_ACTIVITY < Activity
