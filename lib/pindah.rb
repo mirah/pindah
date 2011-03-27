@@ -16,6 +16,7 @@ module Pindah
 
   def self.infer_sdk_location(path)
     tools = path.split(":").detect {|p| File.exists? "#{p}/android" }
+    abort "\"android\" executable not found on $PATH" if tools.nil?
     File.expand_path("#{tools}/..")
   end
 
