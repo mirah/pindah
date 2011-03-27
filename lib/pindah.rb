@@ -2,6 +2,7 @@ require "rake"
 require "fileutils"
 require "pp"
 require "erb"
+require "rexml/document"
 
 begin
   require 'ant'
@@ -41,6 +42,14 @@ module Pindah
   desc "Print the project spec"
   task :spec do
     pp @spec
+  end
+
+  desc "Run the project debug .apk on a device or emulator"
+  task :run => [:install] do
+    manifest_xml = REXML::Document.new(File.new("AndroidManifest.xml"))
+    package_name = manifest_xml.root.attributes["package"]
+    main_activity = REXML::XPath.first(manifest_xml, "//application/activity[intent-filter[action[@android:name='android.intent.action.MAIN']]]/attribute::android:name").value
+    system "adb shell 'am start -a android.intent.action.MAIN -n #{package_name}/#{package_name}.#{main_activity}'"
   end
 
   task :default => [:install]
