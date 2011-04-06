@@ -5,6 +5,9 @@
         <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
         <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
     </path>
+    <path id="java.classpath">
+        <pathelement location="${classpath}" />
+    </path>
 
     <taskdef name="setup"
         classname="com.android.ant.SetupTask"
@@ -20,8 +23,9 @@
 
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
-      <mirahc src="${src}" destdir="${classes}" 
-              classpath="${classpath}" />
+        <mirahc src="${src}" destdir="${classes}">
+            <classpath refid="java.classpath" />
+        </mirahc>
     </target>
 
     <setup />
