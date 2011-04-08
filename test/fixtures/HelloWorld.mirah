@@ -1,3 +1,5 @@
+package tld.pindah.testapp
+
 import android.app.Activity
 
 class HelloWorld < Activity
