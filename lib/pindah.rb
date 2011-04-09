@@ -73,10 +73,33 @@ module Pindah
     File.open(build, "w") { |f| f.puts build_template.result(binding) }
     at_exit { File.delete build }
 
+    mirah_src_dir = File.join(@spec[:src], "mirah")
+    java_src_dir = File.join(@spec[:src], "java")
+    # check to see if there is a mirah subdirectory in the sources
+    if File.directory?(mirah_src_dir)
+      # if so, make sure a java source directory exists.  Otherwise, Ant will
+      # fail
+      unless File.exists?(java_src_dir)
+	puts "=== Creating empty Java source directory ==="
+	Dir.mkdir(java_src_dir)
+      end
+    else
+      # if not, print a warning and set both directories to be the one from the
+      # spec
+      puts "==== WARNING! =============================================="
+      puts "== You are now encouraged to place your source files in   =="
+      puts "== a mirah subdirectory, e.g. 'src/mirah' instead of      =="
+      puts "== 'src'.  Running in compatibility mode.                 =="
+      puts "============================================================"
+      java_src_dir = @spec[:src]
+      mirah_src_dir = @spec[:src]
+    end
+
     # TODO: add key signing config
     { "target" => "android-#{@spec[:target]}",
       "target-version" => "android-#{@spec[:target_version]}",
-      "src" => @spec[:src],
+      "source.dir" => java_src_dir, # Override default Java source directory
+      "src" => mirah_src_dir,
       "sdk.dir" => @spec[:sdk],
       "classes" => @spec[:classes],
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
