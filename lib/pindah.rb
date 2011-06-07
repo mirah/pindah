@@ -16,7 +16,7 @@ module Pindah
     include Rake::DSL
   end
 
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   def self.infer_sdk_location(path)
     tools = path.split(":").detect {|p| File.exists? "#{p}/android" }
