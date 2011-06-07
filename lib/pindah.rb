@@ -12,6 +12,7 @@ end
 require "mirah"
 
 module Pindah
+  include Rake::DSL
   VERSION = '0.1.1'
 
   def self.infer_sdk_location(path)
