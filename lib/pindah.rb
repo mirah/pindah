@@ -74,8 +74,8 @@ module Pindah
     # TODO: this is lame, but ant interpolation doesn't work for project name
     build_template = ERB.new(File.read(File.join(File.dirname(__FILE__), '..',
                                                  'templates', 'build.xml')))
-    build = Tempfile.new(["pindah-build",".xml"])
-    bulid.write(build_template.result(binding))
+    build = Tempfile.new(["pindah-build", ".xml"])
+    build.write(build_template.result(binding))
     build.close
 
     # TODO: add key signing config
