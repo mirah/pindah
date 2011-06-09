@@ -23,7 +23,7 @@
 
     <target name="compile" depends="-resource-src, -aidl, javac"
             description="Compiles project's .mirah files into .class files">
-        <mirahc src="${src}" destdir="${classes}">
+        <mirahc dir="${src}" destdir="${classes}">
             <classpath refid="java.classpath" />
         </mirahc>
     </target>
