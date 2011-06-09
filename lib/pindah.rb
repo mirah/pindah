@@ -1,5 +1,6 @@
 require "rake"
 require "fileutils"
+require "tempfile"
 require "pp"
 require "erb"
 
@@ -73,9 +74,9 @@ module Pindah
     # TODO: this is lame, but ant interpolation doesn't work for project name
     build_template = ERB.new(File.read(File.join(File.dirname(__FILE__), '..',
                                                  'templates', 'build.xml')))
-    build = "/tmp/pindah-#{Process.pid}-build.xml"
-    File.open(build, "w") { |f| f.puts build_template.result(binding) }
-    at_exit { File.delete build }
+    build = Tempfile.new(["pindah-build",".xml"])
+    bulid.write(build_template.result(binding))
+    build.close
 
     # TODO: add key signing config
     { "target" => "android-#{@spec[:target]}",
@@ -89,7 +90,7 @@ module Pindah
       @ant.project.set_user_property(key, value)
     end
 
-    Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(build))
+    Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(build.path))
 
     # Turn ant tasks into rake tasks
     ANT_TASKS.each do |name, description|
