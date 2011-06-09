@@ -19,7 +19,7 @@ module PindahCLI
     mkdir location, 'res/layout'
     mkdir location, 'res/values'
 
-    name = location.split("/").last
+    name = File.basename(location)
     app_name = name.split(/[-_]/).map{ |w| w.capitalize }.join(" ")
 
     FileUtils.mkdir_p src_dir
