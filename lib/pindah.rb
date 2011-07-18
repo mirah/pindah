@@ -27,7 +27,7 @@ module Pindah
 
   DEFAULTS = { :output => File.expand_path("bin"),
     :src => File.expand_path("src"),
-    :classpath => Dir["jars/*jar"],
+    :classpath => Dir["jars/*jar", "libs/*jar"],
     :sdk => Pindah.infer_sdk_location(ENV["PATH"])
   }
 
