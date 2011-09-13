@@ -17,7 +17,7 @@
 
     <!-- TODO: better support for mixed-source builds -->
     <target name="javac" description="Compiles R.java and other gen/ files.">
-      <javac srcdir="gen" destdir="${classes}" 
+      <javac srcdir="${gen.dir}" destdir="${classes}"
              includeantruntime="false" failonerror="true" />
     </target>
 
