@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="<%= @spec[:name] %>">
-    <path id="android.antlibs">
-        <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
-        <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
-        <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
-    </path>
+    <!-- quick check on sdk.dir -->
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
+          unless="sdk.dir" />
+
     <path id="java.classpath">
-        <pathelement location="${classpath}" />
+      <pathelement location="${classpath}" />
+      <pathelement location="${out.classes.absolute.dir}" />
     </path>
-
-    <taskdef name="setup"
-        classname="com.android.ant.SetupTask"
-        classpathref="android.antlibs" />
-
+    
     <taskdef name="mirahc" classname="org.mirah.ant.Compile" />
-
+    
     <!-- TODO: better support for mixed-source builds -->
     <target name="javac" description="Compiles R.java and other gen/ files.">
-      <javac srcdir="${gen.dir}" destdir="${classes}"
-             includeantruntime="false" failonerror="true" />
+      <javac srcdir="${gen.absolute.dir}"
+             destdir="${out.classes.absolute.dir}"
+             includeantruntime="false"
+             failonerror="true" />
+    </target>
+    
+    <target name="compile" depends="-compile" />
+    
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile, javac">
+      <mirahc dir="src" destdir="bin/classes">
+        <classpath refid="java.classpath" />
+      </mirahc>
     </target>
 
-    <target name="compile" depends="-resource-src, -aidl, javac"
-            description="Compiles project's .mirah files into .class files">
-        <mirahc dir="${src}" destdir="${classes}">
-            <classpath refid="java.classpath" />
-        </mirahc>
-    </target>
-
-    <setup />
+    <!-- version-tag: 1 -->
+    <import file="${sdk.dir}/tools/ant/build.xml" />
 </project>
