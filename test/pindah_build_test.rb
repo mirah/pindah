@@ -11,23 +11,24 @@ end
 
 class PindahBuildTest < Test::Unit::TestCase
   def setup
-    @garrett = File.expand_path(File.join(File.dirname(__FILE__), "garrett"))
-    unless File.exists? @garrett
-      system "git clone git://github.com/technomancy/Garrett.git #{@garrett}"
+    @garrett_path = File.expand_path(File.join(File.dirname(__FILE__), "garrett"))
+    unless File.exists? @garrett_path
+      system "git clone git://github.com/technomancy/Garrett.git #{@garrett_path}"
     end
-    system "cd #{@garrett}; git pull"
+    system "cd #{@garrett_path}; git pull"
   end
 
   def test_build
-    system "cd #{@garrett}; jrake debug"
+    cmd = "cd #{@garrett_path}; jrake debug"
+    assert system(cmd), "command failed: '#{cmd}'"
 
     ["Garrett-debug-unaligned.apk",
      "Garrett-debug.apk", "classes.dex"].each do |f|
-      assert File.exists? "#{@garrett}/bin/#{f}"
+      assert File.exists?("#{@garrett_path}/bin/#{f}"), "#{@garrett_path}/bin/#{f} didn't exist"
     end
     ["Garrett", "GarrettView", "R", "R$attr", "R$drawable",
      "R$layout", "R$string"].each do |c|
-      assert File.exists? "#{@garrett}/bin/classes/garrett/p/serviss/#{c}.class"
+      assert File.exists? "#{@garrett_path}/bin/classes/garrett/p/serviss/#{c}.class"
     end
   end
 end
