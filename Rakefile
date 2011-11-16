@@ -8,7 +8,7 @@ Hoe.spec 'pindah' do |h|
   h.url = "http://github.com/mirah/pindah"
   h.readme_file = "README.md"
   h.summary = "A tool for writing Android applications in Mirah"
-  extra_deps << ["mirah", ">= 0.0.5"]
+  extra_deps << ["mirah", ">= 0.0.10"]
 end
 
 # vim: syntax=ruby

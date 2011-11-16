@@ -22,7 +22,7 @@
     <target name="compile" depends="-compile" />
     
     <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile, javac">
-      <mirahc dir="src" destdir="bin/classes">
+      <mirahc dir="src" destdir="bin/classes" jvmversion="1.6">
         <classpath refid="java.classpath" />
       </mirahc>
     </target>
