@@ -19,7 +19,7 @@ class PindahBuildTest < Test::Unit::TestCase
   end
 
   def test_build
-    cmd = "cd #{@garrett_path}; jrake debug"
+    cmd = "cd #{@garrett_path}; rake debug"
     assert system(cmd), "command failed: '#{cmd}'"
 
     ["Garrett-debug-unaligned.apk",
