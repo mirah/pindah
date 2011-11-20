@@ -4,7 +4,7 @@ A tool for writing Android applications in [Mirah](http://mirah.org).
 
 <img src="https://github.com/mirah/pindah/raw/master/pindah.png" alt="Pindah logo" align="right" />
 
-## Requirements
+## Requirements<a name="requirements"></a>
 
 You must have the [Android SDK](http://d.android.com/sdk/) installed
 with the <tt>tools/</tt> directory placed on your $PATH. Inside
@@ -97,6 +97,15 @@ your application.
 
 See [Garrett](http://github.com/technomancy/Garrett) for an example of
 a basic project.
+
+## Contributing
+
+To contribute to Pindah, you need the [required environment](#requirements) setup.
+You can get tests with the following set of commands.
+
+    $ git clone git@github.com:mirah/pindah.git
+    $ bundle install
+    $ rake test
 
 ## Community
 
