@@ -4,7 +4,8 @@ A tool for writing Android applications in [Mirah](http://mirah.org).
 
 <img src="https://github.com/mirah/pindah/raw/master/pindah.png" alt="Pindah logo" align="right" />
 
-## Requirements<a name="requirements"></a>
+<a name="requirements"></a>
+## Requirements
 
 You must have the [Android SDK](http://d.android.com/sdk/) installed
 with the <tt>tools/</tt> directory placed on your $PATH. Inside
