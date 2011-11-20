@@ -2,3 +2,4 @@ pkg/
 test/garrett
 *.swp
 Gemfile.lock
+.redcar/
