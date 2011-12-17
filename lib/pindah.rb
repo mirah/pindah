@@ -62,6 +62,14 @@ module Pindah
     @spec[:target] ||= TARGETS[@spec[:target_version].to_s.sub(/android-/, '')]
     @spec[:classes] ||= "#{@spec[:output]}/classes/"
     @spec[:classpath] << @spec[:classes]
+    
+    if @spec.has_key?(:libraries)
+      @spec[:libraries].each do |path|
+        # TODO: do libraries always build to bin/classes?
+        @spec[:classpath] << "#{File.expand_path path}/bin/classes/"
+      end
+    end
+    
     @spec[:classpath] << "#{@spec[:sdk]}/platforms/android-#{@spec[:target]}/android.jar"
     @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D " +
       "AndroidRuntime:E *:S"
