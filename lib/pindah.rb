@@ -93,7 +93,6 @@ module Pindah
     if @spec.has_key?(:libraries)
       @spec[:libraries].each_with_index do |path, i|
         prop = "android.library.reference.#{i + 1}"
-        puts "setting #{prop} to #{path}"
         # NB: absolute paths do not work
         user_properties[prop] = path
       end
