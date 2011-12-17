@@ -80,14 +80,26 @@ module Pindah
     build.close
 
     # TODO: add key signing config
-    { "target" => "android-#{@spec[:target]}",
+    user_properties = {
+      "target" => "android-#{@spec[:target]}",
       "target-version" => "android-#{@spec[:target_version]}",
       "src" => @spec[:src],
       "sdk.dir" => @spec[:sdk],
       "classes" => @spec[:classes],
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
                                             getProperty("path.separator"))
-    }.each do |key, value|
+    }
+      
+    if @spec.has_key?(:libraries)
+      @spec[:libraries].each_with_index do |path, i|
+        prop = "android.library.reference.#{i + 1}"
+        puts "setting #{prop} to #{path}"
+        # NB: absolute paths do not work
+        user_properties[prop] = path
+      end
+    end
+    
+    user_properties.each do |key, value|
       @ant.project.set_user_property(key, value)
     end
 
