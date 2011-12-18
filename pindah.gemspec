@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/mirah/pindah}
   s.executables = ["pindah"]
   s.extra_rdoc_files = %w{History.txt Manifest.txt}
-  s.files = File.readlines("Manifest.txt")
+  s.files = File.readlines("Manifest.txt").map(&:chomp)
   s.rdoc_options = ["--main", "README.md"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.3.5"
