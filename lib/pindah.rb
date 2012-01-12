@@ -33,7 +33,9 @@ module Pindah
 
   TARGETS = { "1.5" => 3, "1.6" => 4,
     "2.1" => 7, "2.2" => 8, "2.3" => 9, "2.3.3" => 9, "2.3.4" => 10,
-    "3.0" => 11, "3.1" => 12, "3.2" => 13 }
+    "3.0" => 11, "3.1" => 12, "3.2" => 13,
+    "4.0" => 14, "4.0.3" => 15
+  }
 
   ANT_TASKS = ["clean", "javac", "compile", "debug", "release",
                "release_unsigned", "install", "uninstall"]
