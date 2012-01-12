@@ -87,7 +87,6 @@ module Pindah
     build.write(build_template.result(binding))
     build.close
 
-    # TODO: add key signing config
     user_properties = {
       "target" => "android-#{@spec[:target]}",
       "target-version" => "android-#{@spec[:target_version]}",
@@ -97,7 +96,30 @@ module Pindah
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
                                             getProperty("path.separator"))
     }
+
+    if @spec[:key_store] && @spec[:key_alias]
+      # add key signing config
+
+      # NB: due to a JRuby/Ant bug, Ant can't read these passwords from the
+      # command line.
+      #
+      # So, we'll work around this for now. Icky.
+      # 
+      # See: http://jira.codehaus.org/browse/JRUBY-4827
+      puts "Please enter keystore password (store:#{@spec[:key_store]}):"
+      store_pw = STDIN.gets.chomp
+
+      puts "Please enter password for alias '#{@spec[:key_alias]}':"
+      alias_pw = STDIN.gets.chomp
       
+      user_properties.merge!({
+                               "key.store" => @spec[:key_store],
+                               "key.alias" => @spec[:key_alias],
+                               "key.store.password" => store_pw,
+                               "key.alias.password" => alias_pw
+                             })
+    end
+    
     if @spec.has_key?(:libraries)
       @spec[:libraries].each_with_index do |path, i|
         prop = "android.library.reference.#{i + 1}"
