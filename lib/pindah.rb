@@ -36,7 +36,9 @@ module Pindah
     "3.0" => 11, "3.1" => 12, "3.2" => 13 }
 
   ANT_TASKS = ["clean", "javac", "compile", "debug", "release",
-               "install", "uninstall"]
+               "release_unsigned", "install", "uninstall"]
+  SIGNED_TASKS = ["release"]
+  ANT_TASK_MAP = (Hash.new {|h,k| h[k] = k}).merge({ "release_unsigned" => "release" })
 
   task :generate_manifest # TODO: generate from yaml?
 
@@ -83,9 +85,9 @@ module Pindah
     # TODO: this is lame, but ant interpolation doesn't work for project name
     build_template = ERB.new(File.read(File.join(File.dirname(__FILE__), '..',
                                                  'templates', 'build.xml')))
-    build = Tempfile.new(["pindah-build", ".xml"])
-    build.write(build_template.result(binding))
-    build.close
+    @build = Tempfile.new(["pindah-build", ".xml"])
+    @build.write(build_template.result(binding))
+    @build.close
 
     user_properties = {
       "target" => "android-#{@spec[:target]}",
@@ -96,29 +98,6 @@ module Pindah
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
                                             getProperty("path.separator"))
     }
-
-    if @spec[:key_store] && @spec[:key_alias]
-      # add key signing config
-
-      # NB: due to a JRuby/Ant bug, Ant can't read these passwords from the
-      # command line.
-      #
-      # So, we'll work around this for now. Icky.
-      # 
-      # See: http://jira.codehaus.org/browse/JRUBY-4827
-      puts "Please enter keystore password (store:#{@spec[:key_store]}):"
-      store_pw = STDIN.gets.chomp
-
-      puts "Please enter password for alias '#{@spec[:key_alias]}':"
-      alias_pw = STDIN.gets.chomp
-      
-      user_properties.merge!({
-                               "key.store" => @spec[:key_store],
-                               "key.alias" => @spec[:key_alias],
-                               "key.store.password" => store_pw,
-                               "key.alias.password" => alias_pw
-                             })
-    end
     
     if @spec.has_key?(:libraries)
       @spec[:libraries].each_with_index do |path, i|
@@ -132,12 +111,51 @@ module Pindah
       @ant.project.set_user_property(key, value)
     end
 
-    Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(build.path))
+    Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(@build.path))
 
     # Turn ant tasks into rake tasks
     ANT_TASKS.each do |name, description|
-      desc @ant.project.targets[name].description
-      task(name) { @ant.project.execute_target(name) }
+      ant_name = ANT_TASK_MAP[name]
+      
+      desc @ant.project.targets[ant_name].description
+      task(name) do
+        add_signature_properties if SIGNED_TASKS.include?(name)
+        @ant.project.execute_target(ant_name)
+      end
     end
+  end
+
+  protected
+
+  def self.add_signature_properties
+    # Add key signing config
+    if @spec[:key_store] && @spec[:key_alias]
+
+      # NB: due to a JRuby/Ant bug, Ant can't read these passwords from the
+      # command line.
+      #
+      # So, we'll work around this for now. Icky.
+      # 
+      # See: http://jira.codehaus.org/browse/JRUBY-4827
+      puts "Please enter keystore password (store:#{@spec[:key_store]}):"
+      store_pw = STDIN.gets.chomp
+
+      puts "Please enter password for alias '#{@spec[:key_alias]}':"
+      alias_pw = STDIN.gets.chomp
+      
+      signature_properties = {
+        "key.store" => @spec[:key_store],
+        "key.alias" => @spec[:key_alias],
+        "key.store.password" => store_pw,
+        "key.alias.password" => alias_pw
+      }
+      
+      signature_properties.each do |key, value|
+        @ant.project.set_user_property(key, value)
+      end
+      
+      # NB: we need to do this again to actually set the new properties.
+      Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(@build.path))
+    end    
   end
 end
