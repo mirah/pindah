@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="<%= @spec[:name] %>">
+    <property file="local.properties" />
+
+    <property environment="env" />
+    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+
+    <property file="project.properties" />
+
     <!-- quick check on sdk.dir -->
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
           unless="sdk.dir" />

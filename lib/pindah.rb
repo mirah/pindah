@@ -93,6 +93,15 @@ module Pindah
     @build.write(build_template.result(binding))
     @build.close
 
+    if @spec.has_key?(:libraries)
+      # Push the libs in through project.properties
+      props_template = ERB.new(File.read(File.join(File.dirname(__FILE__), '..',
+                                                   'templates', 'project.properties')))
+      @props = File.new("project.properties", 'w')
+      @props.write(props_template.result(binding))
+      @props.close
+    end
+
     user_properties = {
       "target" => "android-#{@spec[:target]}",
       "target-version" => "android-#{@spec[:target_version]}",
@@ -102,14 +111,6 @@ module Pindah
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
                                             getProperty("path.separator"))
     }
-    
-    if @spec.has_key?(:libraries)
-      @spec[:libraries].each_with_index do |path, i|
-        prop = "android.library.reference.#{i + 1}"
-        # NB: absolute paths do not work
-        user_properties[prop] = path
-      end
-    end
     
     user_properties.each do |key, value|
       @ant.project.set_user_property(key, value)
