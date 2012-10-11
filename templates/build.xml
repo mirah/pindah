@@ -8,9 +8,9 @@
       <pathelement location="${classpath}" />
       <pathelement location="${out.classes.absolute.dir}" />
     </path>
-    
+
     <taskdef name="mirahc" classname="org.mirah.ant.Compile" />
-    
+
     <!-- TODO: better support for mixed-source builds -->
     <target name="javac" description="Compiles R.java and other gen/ files.">
       <javac srcdir="${gen.absolute.dir}"
@@ -18,9 +18,9 @@
              includeantruntime="false"
              failonerror="true" />
     </target>
-    
+
     <target name="compile" depends="-compile" />
-    
+
     <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile, javac">
       <mirahc dir="src" destdir="bin/classes" jvmversion="1.6">
         <classpath refid="java.classpath" />
