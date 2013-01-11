@@ -121,18 +121,29 @@ module Pindah
     Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(@build.path))
 
     # Turn ant tasks into rake tasks
-    ANT_TASKS.each do |name, description|
+    add_tasks(ANT_TASKS)
+    add_tasks(@spec[:extra_tasks])
+  end
+
+  protected
+
+  def self.add_tasks(tasks=nil)
+    return if tasks.nil?
+    tasks.each do |name, description|
       ant_name = ANT_TASK_MAP[name]
-      
-      desc @ant.project.targets[ant_name].description
+
+      target_task = @ant.project.targets[ant_name]
+      if target_task
+        desc target_task.description
+      else
+        desc name
+      end
       task(name) do
         add_signature_properties if SIGNED_TASKS.include?(name)
         @ant.project.execute_target(ant_name)
       end
     end
   end
-
-  protected
 
   def self.add_signature_properties
     # Add key signing config
