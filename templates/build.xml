@@ -38,4 +38,8 @@
 
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+
+    <% if @spec[:extra_ant_xml] %>
+    <import file="<%= File.expand_path @spec[:extra_ant_xml] %>" />
+    <% end %>
 </project>
