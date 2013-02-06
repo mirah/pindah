@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="<%= @spec[:name] %>">
+    <property file="local.properties" />
+
+    <property environment="env" />
+    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+
+    <property file="project.properties" />
+
     <!-- quick check on sdk.dir -->
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
           unless="sdk.dir" />
@@ -15,6 +24,8 @@
     <target name="javac" description="Compiles R.java and other gen/ files.">
       <javac srcdir="${gen.absolute.dir}"
              destdir="${out.classes.absolute.dir}"
+             source="1.6"
+             target="1.6"
              includeantruntime="false"
              failonerror="true" />
     </target>
@@ -29,4 +40,8 @@
 
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+
+    <% if @spec[:extra_ant_xml] %>
+    <import file="<%= File.expand_path @spec[:extra_ant_xml] %>" />
+    <% end %>
 </project>
