@@ -1,5 +1,6 @@
 pkg/
 test/garrett
 *.swp
+*.gem
 Gemfile.lock
 .redcar/

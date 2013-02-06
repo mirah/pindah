@@ -24,6 +24,8 @@
     <target name="javac" description="Compiles R.java and other gen/ files.">
       <javac srcdir="${gen.absolute.dir}"
              destdir="${out.classes.absolute.dir}"
+             source="1.6"
+             target="1.6"
              includeantruntime="false"
              failonerror="true" />
     </target>
