@@ -2,7 +2,7 @@ require 'fileutils'
 require 'erb'
 
 module PindahCLI
-  DEFAULT_TARGET_VERSION = '2.1'
+  DEFAULT_TARGET_VERSION = '2.3.3'
 
   def self.create(package, location=nil, activity_name=nil)
     segments = package.split('.')
