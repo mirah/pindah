@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
   s.rubygems_version = "1.3.5"
 
   s.add_runtime_dependency("mirah", ">= 0.0.10.dev")
+  s.add_runtime_dependency("rake", ">= 0.9.2.2")
 end
