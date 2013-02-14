@@ -4,3 +4,5 @@ test/garrett
 *.gem
 Gemfile.lock
 .redcar/
+vendor/
+.bundle/
