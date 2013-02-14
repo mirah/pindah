@@ -3,6 +3,7 @@ require "fileutils"
 require "tempfile"
 require "pp"
 require "erb"
+require "pathname"
 
 begin
   require 'ant'
@@ -22,7 +23,8 @@ module Pindah
   def self.infer_sdk_location(path)
     tools = path.split(File::PATH_SEPARATOR).detect {|p| File.exists?("#{p}/android") || File.exists?("#{p}/android.bat") }
     abort "\"android\" executable not found on $PATH" if tools.nil?
-    File.expand_path("#{tools}/..")
+    real_location = Pathname.new("#{tools}/android").realpath.dirname
+    File.expand_path("#{real_location}/..")
   end
 
   DEFAULTS = { :output => File.expand_path("bin"),
