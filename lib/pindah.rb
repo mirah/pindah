@@ -41,8 +41,9 @@ module Pindah
     "4.2" => 17
   }
 
-  ANT_TASKS = ["clean", "javac", "compile", "debug", "release",
-               "release_unsigned", "install", "uninstall"]
+  ANT_TASKS = ["javac", "compile", "clean", "debug", "release",
+               "release_unsigned", "instrument", "test", "install", "installd",
+               "installr", "installi", "installt", "uninstall"]
   SIGNED_TASKS = ["release"]
   ANT_TASK_MAP = (Hash.new {|h,k| h[k] = k}).merge({ "release_unsigned" => "release" })
 
