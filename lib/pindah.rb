@@ -133,10 +133,10 @@ module Pindah
       ant_name = ANT_TASK_MAP[name]
 
       target_task = @ant.project.targets[ant_name]
-      if target_task
-        desc target_task.description
+      if target_task && target_task.description
+        desc target_task.description.gsub(/\s\s+/, "\n")
       else
-        desc name
+        desc "Run #{name}"
       end
       task(name) do
         add_signature_properties if SIGNED_TASKS.include?(name)
