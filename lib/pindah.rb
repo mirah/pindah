@@ -129,7 +129,7 @@ module Pindah
 
   def self.add_tasks(tasks=nil)
     return if tasks.nil?
-    tasks.each do |name, description|
+    tasks.each do |name|
       ant_name = ANT_TASK_MAP[name]
 
       target_task = @ant.project.targets[ant_name]
