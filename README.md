@@ -25,6 +25,10 @@ Additionally, you will need:
 * [rake](http://rake.rubyforge.org) 10.0.3.
 * [mirah](http://github.com/mirah/mirah) 0.0.12.
 
+(NB: There is rudimentary support for running JRuby 1.7.2 against mirah
+master. See #37, [follow these instructions](https://gist.github.com/abscondment/4963649),
+and beware: Here be dragons!)
+
 While you can get OpenJDK from your distribution, it is recommended
 that you use something like
 [rbenv](https://github.com/sstepehenson/rbenv) to manage your Ruby
