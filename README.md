@@ -46,8 +46,15 @@ Finally, to install pindah:
     $ gem build pindah.gemspec
     $ gem install pindah-0.1.3.dev.gem
 
-(`gem install pindah` will install an outdated version)
+(`gem install pindah` currently installs an outdated version)
     
+This also works with bundler; i.e. in a Gemfile like so:
+
+    source :rubygems
+    
+    gem 'mirah', '0.0.12'
+    gem 'pindah', :git => 'git://github.com/mirah/pindah'
+
 ## Usage
 
 The <tt>pindah</tt> executable will create a new project starting
