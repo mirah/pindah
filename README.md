@@ -19,12 +19,31 @@ and is a reasonable target for new applications. Once the platform
 tools are installed, place the SDK's <tt>platform-tools/</tt>
 directory on your $PATH as well.
 
-You'll also need [JRuby](http://jruby.org) version 1.6 or higher 
-installed with bin/ on your $PATH. If your gem and rake are not from 
-from JRuby, prefix the gem and rake commands with jruby -S:
+Additionally, you will need:
+* [OpenJDK](http://openjdk.java.net) 6 or 7.
+* [JRuby](http://jruby.org) 1.6.8.
+* [rake](http://rake.rubyforge.org) 10.0.3.
+* [mirah](http://github.com/mirah/mirah) 0.0.12.
 
-    $ gem install pindah
+While you can get OpenJDK from your distribution, it is recommended
+that you use something like
+[rbenv](https://github.com/sstepehenson/rbenv) to manage your Ruby
+things:
 
+    $ rbenv install jruby-1.6.8
+    $ rbenv --global jruby-1.6.8
+    $ gem install rake
+    $ gem install mirah
+
+Finally, to install pindah:
+
+    $ git clone git://github.com/mirah/pindah
+    $ cd pindah/
+    $ gem build pindah.gemspec
+    $ gem install pindah-0.1.3.dev.gem
+
+(`gem install pindah` will install an outdated version)
+    
 ## Usage
 
 The <tt>pindah</tt> executable will create a new project starting
