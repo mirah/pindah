@@ -13,8 +13,8 @@ with the <tt>tools/</tt> directory placed on your $PATH. Inside
 download "platform" packages corresponding with Android versions you
 wish to develop against. You'll need to install "Android SDK Platform
 tools" and at least one platform revision to get started. At the time
-of this writing, Android 2.1 (revision 7)
-[covers over 94% of the market](http://developer.android.com/resources/dashboard/platform-versions.html)
+of this writing, Android 2.3.3 (revision 10)
+[covers about 90% of the market](http://developer.android.com/resources/dashboard/platform-versions.html)
 and is a reasonable target for new applications. Once the platform
 tools are installed, place the SDK's <tt>platform-tools/</tt>
 directory on your $PATH as well.
