@@ -95,16 +95,23 @@ describes the contents and metadata of your application. The
 directory.
 
     $ rake -T
-    
-    rake clean      # Removes output files created by other targets.
-    rake compile    # Compiles project's .mirah files into .class files
-    rake debug      # Builds the application and signs it with a debug key.
-    rake install    # Installs/reinstalls the debug package onto a running     ...
-    rake javac      # Compiles R.java and other gen/ files.
-    rake logcat     # Tail logs from a device or a device or emulator
-    rake release    # Builds the application.
-    rake spec       # Print the project spec
-    rake uninstall  # Uninstalls the application from a running emulator or dev...
+
+    rake clean             # Removes output files created by other targets.
+    rake compile           # Run compile
+    rake debug             # Builds the application and signs it with a debug key.
+    rake install           # Installs the newly build package.
+    rake installd          # Installs (only) the debug package.
+    rake installi          # Installs (only) the instrumented package.
+    rake installr          # Installs (only) the release package.
+    rake installt          # Installs (only) the test and tested packages.
+    rake instrument        # Builds an instrumented packaged.
+    rake javac             # Compiles R.java and other gen/ files.
+    rake logcat            # Tail logs from a device or a device or emulator
+    rake release           # Builds the application in release mode.
+    rake release_unsigned  # Builds the application in release mode.
+    rake spec              # Print the project spec
+    rake test              # Runs tests from the package defined in test.package property
+    rake uninstall         # Uninstalls the application from a running emulator or device.
 
     $ rake debug
     
@@ -115,9 +122,9 @@ directory.
     -rw-r--r--   1 user           user        13222 Feb  7 23:16 bin/hello_world-debug.apk
 
 This .apk file may be installed on a connected device or emulator with
-<tt>rake install</tt>. It may even distributed for users to install
-themselves, though stable versions should use the <tt>release</tt>
-task. 
+<tt>rake installd</tt>. It may even distributed for users to install
+themselves, though stable versions should be built with the
+<tt>release</tt> task.
 
 The official documentation has
 [more details on building](http://developer.android.com/guide/developing/other-ide.html#Building). The
