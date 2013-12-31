@@ -28,6 +28,13 @@
              target="1.6"
              includeantruntime="false"
              failonerror="true" />
+      <javac srcdir="${source.dir}"
+             destdir="${out.classes.absolute.dir}"
+             source="1.6"
+             target="1.6"
+             includeantruntime="false"
+             failonerror="true"
+             classpath="${java.classpath}:${sdk.dir}/platforms/${target}/android.jar" />
     </target>
 
     <target name="compile" depends="-compile" />
