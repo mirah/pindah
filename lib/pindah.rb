@@ -21,14 +21,11 @@ module Pindah
   VERSION = '0.1.2'
 
   def self.infer_sdk_location(path)
-    if ENV["ANDROID_HOME"] == "" then
-      tools = path.split(File::PATH_SEPARATOR).detect {|p| File.exists?("#{p}/android") || File.exists?("#{p}/android.bat") }
-      abort "\"android\" executable not found on $PATH" if tools.nil?
-      real_location = Pathname.new("#{tools}/android").realpath.dirname
-      File.expand_path("#{real_location}/..")
-    else
-      ENV["ANDROID_HOME"]
-    end
+    return ENV["ANDROID_HOME"] if ENV["ANDROID_HOME"] == nil
+    tools = path.split(File::PATH_SEPARATOR).detect {|p| File.exists?("#{p}/android") || File.exists?("#{p}/android.bat") }
+    abort "\"android\" executable not found on $PATH" if tools.nil?
+    real_location = Pathname.new("#{tools}/android").realpath.dirname
+    File.expand_path("#{real_location}/..")
   end
 
   DEFAULTS = { :output => File.expand_path("bin"),
