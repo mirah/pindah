@@ -18,36 +18,45 @@ module Pindah
     include Rake::DSL
   end
 
-  VERSION = '0.1.2'
+  VERSION = '0.1.3-dev'
 
   def self.infer_sdk_location(path)
-    tools = path.split(File::PATH_SEPARATOR).detect {|p| File.exists?("#{p}/android") || File.exists?("#{p}/android.bat") }
+    tools = path.split(File::PATH_SEPARATOR).detect { |p| File.exists?("#{p}/android") || File.exists?("#{p}/android.bat") }
     abort "\"android\" executable not found on $PATH" if tools.nil?
     real_location = Pathname.new("#{tools}/android").realpath.dirname
     File.expand_path("#{real_location}/..")
   end
 
-  DEFAULTS = { :output => File.expand_path("bin"),
+  DEFAULTS = {
+    :output => File.expand_path("bin"),
     :src => File.expand_path("src"),
     :classpath => Dir["jars/*jar", "libs/*jar"],
     :sdk => Pindah.infer_sdk_location(ENV["PATH"])
   }
 
-  TARGETS = { "1.5" => 3, "1.6" => 4,
-    "2.1" => 7, "2.2" => 8,
-    "2.3" => 9, "2.3.1" => 9, "2.3.2" => 9,
+  TARGETS = {
+    "1.5"   => 3,
+    "1.6"   => 4,
+    "2.1"   => 7,
+    "2.2"   => 8,
+    "2.3"   => 9, "2.3.1" => 9, "2.3.2" => 9,
     "2.3.3" => 10, "2.3.4" => 10,
-    "3.0" => 11, "3.1" => 12, "3.2" => 13,
-    "4.0" => 14, "4.0.3" => 15, "4.0.4" => 15,
-    "4.1" => 16, "4.1.1" => 16, "4.1.2" => 16,
-    "4.2" => 17
+    "3.0"   => 11,
+    "3.1"   => 12,
+    "3.2"   => 13,
+    "4.0"   => 14, "4.0.1" => 14, "4.0.2" => 14,
+    "4.0.3" => 15, "4.0.4" => 15,
+    "4.1"   => 16, "4.1.1" => 16, "4.1.2" => 16,
+    "4.2"   => 17, "4.2.2" => 17,
+    "4.3"   => 18,
+    "4.4"   => 19
   }
 
   ANT_TASKS = ["javac", "compile", "clean", "debug", "release",
                "release_unsigned", "instrument", "test", "install", "installd",
                "installr", "installi", "installt", "uninstall"]
   SIGNED_TASKS = ["release"]
-  ANT_TASK_MAP = (Hash.new {|h,k| h[k] = k}).merge({ "release_unsigned" => "release" })
+  ANT_TASK_MAP = (Hash.new { |h, k| h[k] = k }).merge({ "release_unsigned" => "release" })
 
   task :generate_manifest # TODO: generate from yaml?
 
@@ -73,14 +82,14 @@ module Pindah
     @spec[:target] ||= TARGETS[@spec[:target_version].to_s.sub(/android-/, '')]
     @spec[:classes] ||= "#{@spec[:output]}/classes/"
     @spec[:classpath] << @spec[:classes]
-    
+
     if @spec.has_key?(:libraries)
       @spec[:libraries].each do |path|
         # TODO: do libraries always build to bin/classes?
         @spec[:classpath] << "#{File.expand_path path}/bin/classes/"
       end
     end
-    
+
     @spec[:classpath] << "#{@spec[:sdk]}/platforms/android-#{@spec[:target]}/android.jar"
     @spec[:log_spec] ||= "ActivityManager:I #{@spec[:name]}:D " +
       "AndroidRuntime:E *:S"
@@ -116,7 +125,7 @@ module Pindah
       "classpath" => @spec[:classpath].join(Java::JavaLang::System::
                                             getProperty("path.separator"))
     }
-    
+
     user_properties.each do |key, value|
       @ant.project.set_user_property(key, value)
     end
@@ -136,11 +145,13 @@ module Pindah
       ant_name = ANT_TASK_MAP[name]
 
       target_task = @ant.project.targets[ant_name]
+
       if target_task && target_task.description
         desc target_task.description.gsub(/\s\s+/, "\n")
       else
         desc "Run #{name}"
       end
+
       task(name) do
         add_signature_properties if SIGNED_TASKS.include?(name)
         @ant.project.execute_target(ant_name)
@@ -156,27 +167,28 @@ module Pindah
       # command line.
       #
       # So, we'll work around this for now. Icky.
-      # 
+      #
       # See: http://jira.codehaus.org/browse/JRUBY-4827
       puts "Please enter keystore password (store:#{@spec[:key_store]}):"
       store_pw = STDIN.gets.chomp
 
       puts "Please enter password for alias '#{@spec[:key_alias]}':"
       alias_pw = STDIN.gets.chomp
-      
+
       signature_properties = {
         "key.store" => @spec[:key_store],
         "key.alias" => @spec[:key_alias],
         "key.store.password" => store_pw,
         "key.alias.password" => alias_pw
       }
-      
+
       signature_properties.each do |key, value|
         @ant.project.set_user_property(key, value)
       end
-      
+
       # NB: we need to do this again to actually set the new properties.
       Ant::ProjectHelper.configure_project(@ant.project, java.io.File.new(@build.path))
-    end    
+    end
   end
 end
+
