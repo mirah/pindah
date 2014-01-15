@@ -18,7 +18,7 @@ module Pindah
     include Rake::DSL
   end
 
-  VERSION = '0.1.3.dev'
+  VERSION = '0.1.3'
 
   def self.infer_sdk_location(path)
     return ENV["ANDROID_HOME"] unless ENV["ANDROID_HOME"].nil?

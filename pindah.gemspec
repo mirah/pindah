@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{pindah}
-  s.version = "0.1.3.dev"
+  s.version = "0.1.3"
   s.date =  Time.now.strftime("%Y-%m-%d")
   s.authors = [%q{Phil Hagelberg, Brendan Ribera, Adam Parrott}]
   s.email = [%q{technomancy@gmail.com, brendan.ribera@gmail.com, parrott.adam@gmail.com}]
