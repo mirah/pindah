@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.name = %q{pindah}
   s.version = "0.1.3.dev"
   s.date =  Time.now.strftime("%Y-%m-%d")
-  s.authors = [%q{Phil Hagelberg}]
-  s.email = [%q{technomancy@gmail.com}]
+  s.authors = [%q{Phil Hagelberg, Brendan Ribera, Adam Parrott}]
+  s.email = [%q{technomancy@gmail.com, brendan.ribera@gmail.com, parrott.adam@gmail.com}]
   s.summary = %q{A tool for writing Android applications in Mirah}
   s.description = %q{}
   s.homepage = %q{http://github.com/mirah/pindah}
@@ -16,6 +16,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = "1.3.5"
 
-  s.add_runtime_dependency("mirah", ">= 0.0.10.dev")
+  s.add_runtime_dependency("mirah", ">= 0.1.0")
   s.add_runtime_dependency("rake", ">= 0.9.2.2")
 end
